@@ -11,6 +11,7 @@ import Venues from "./pages/Venues.jsx";
 import Contact from "./pages/Contact.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import TermsOfService from "./pages/TermsOfService.jsx";
+import NotFound from "./pages/NotFound.jsx";
 import Chatbot from "./components/Chatbot.jsx";
 import { getTheme, decoBgStyle, gold, crimsonBright } from "./theme.js";
 
@@ -34,7 +35,14 @@ function App() {
     setRegisteredIds((prev) => prev.filter((rid) => rid !== id));
   }
 
-  const [viewedDomains, setViewedDomains] = useState([]);
+  const [viewedDomains, setViewedDomains] = useState(() => {
+    const saved = localStorage.getItem('viewedDomains');
+    return saved ? JSON.parse(saved) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem('viewedDomains', JSON.stringify(viewedDomains));
+  }, [viewedDomains]);
+
   function trackDomainView(domain) {
     setViewedDomains((prev) => [...prev, domain]);
   }
@@ -208,7 +216,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<Home viewedDomains={viewedDomains} onTrackDomainView={trackDomainView} isDarkMode={isDarkMode} />}
+              element={<Home viewedDomains={viewedDomains} onTrackDomainView={trackDomainView} isDarkMode={isDarkMode} registeredIds={registeredIds} />}
             />
             <Route
               path="/conference/:id"
@@ -221,6 +229,7 @@ function App() {
                   onAddSession={addToSchedule}
                   onRemoveSession={removeFromSchedule}
                   isDarkMode={isDarkMode}
+                  currentUser={currentUser}
                 />
               }
             />
@@ -242,6 +251,7 @@ function App() {
             <Route path="/contact" element={<Contact isDarkMode={isDarkMode} />} />
             <Route path="/privacy" element={<PrivacyPolicy isDarkMode={isDarkMode} />} />
             <Route path="/terms" element={<TermsOfService isDarkMode={isDarkMode} />} />
+            <Route path="*" element={<NotFound isDarkMode={isDarkMode} />} />
           </Routes>
         </div>
 

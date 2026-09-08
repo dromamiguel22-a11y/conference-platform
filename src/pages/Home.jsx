@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import conferences from '../conference.js';
 import getConferenceStatus from '../utils.js';
 import { getTheme, decoBgStyle, crimsonBright } from '../theme.js';
@@ -43,6 +43,16 @@ function ConferenceCard(props) {
             alt={props.title}
             className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
           />
+          {props.isRegistered && (
+            <div
+              className="absolute top-2 left-2 px-2 py-1 rounded-sm border flex items-center gap-1"
+              style={{ backgroundColor: t.panel, borderColor: t.accent }}
+            >
+              <span className="text-[10px] font-['Montserrat'] uppercase tracking-wider font-bold whitespace-nowrap" style={{ color: t.accent }}>
+                ✓ Registered
+              </span>
+            </div>
+          )}
           <div
             className={`absolute top-2 right-2 px-2 py-1 rounded-sm border flex items-center gap-1 ${tag.live ? 'animate-glow-pulse' : ''}`}
             style={{ backgroundColor: tag.bg, borderColor: t.accent, '--pulse-color': t.pulseGlow }}
@@ -99,15 +109,32 @@ function SideColumn({ side, theme }) {
   );
 }
 
-function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
+function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
   const theme = getTheme(isDarkMode);
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const gridRef = useRef(null);
 
+  const searchLower = searchText.toLowerCase();
   const filteredConferences = conferences
-    .filter((conf) => conf.title.toLowerCase().includes(searchText.toLowerCase()))
+    .filter((conf) => {
+      const matchesTitle = conf.title.toLowerCase().includes(searchLower);
+      const matchesLocation = conf.location.toLowerCase().includes(searchLower);
+      const matchesSpeaker = conf.speakers.some((s) => s.name.toLowerCase().includes(searchLower));
+      return matchesTitle || matchesLocation || matchesSpeaker;
+    })
     .filter((conf) => selectedCategory === 'All' || conf.domain === selectedCategory);
+
+  const hasActiveFilters = searchText !== '' || selectedCategory !== 'All';
+  function clearFilters() {
+    setSearchText('');
+    setSelectedCategory('All');
+  }
+
+  function scrollToResults() {
+    gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   function getMostViewedDomain() {
     if (viewedDomains.length === 0) return null;
@@ -175,10 +202,12 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
               onChange={(e) => setSearchText(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
+              onKeyDown={(e) => e.key === 'Enter' && scrollToResults()}
               className="bg-transparent border-none focus:ring-0 w-full min-w-0 px-2 py-2 outline-none font-['Montserrat'] text-sm sm:text-base"
               style={{ color: theme.text }}
             />
             <button
+              onClick={scrollToResults}
               className="shrink-0 px-4 sm:px-6 py-2.5 text-xs font-['Montserrat'] uppercase tracking-widest font-bold text-white transition-transform hover:scale-105 rounded"
               style={{ backgroundColor: crimsonBright }}
             >
@@ -208,7 +237,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
 
       <div className="px-4 sm:px-6 max-w-6xl mx-auto">
         {/* Category pills */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-1">
+        <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mt-1">
           {categories.map((cat, i) => (
             <button
               key={cat.name}
@@ -226,6 +255,15 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
               <span>{cat.icon}</span> {cat.name}
             </button>
           ))}
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="text-xs sm:text-sm font-['Montserrat'] uppercase tracking-widest font-bold hover:underline transition-all"
+              style={{ color: theme.muted }}
+            >
+              ✕ Clear Filters
+            </button>
+          )}
         </div>
 
         {/* Recommended */}
@@ -252,6 +290,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
                     image={conf.image}
                     delay={`${i * 80}ms`}
                     theme={theme}
+                    isRegistered={registeredIds.includes(conf.id)}
                   />
                 </Link>
               ))}
@@ -260,27 +299,34 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
         )}
 
         {/* Divider */}
-        <div className="mt-12 mb-6 flex items-center gap-4 ornamental-divider" style={{ '--frame-color': theme.accent }}>
+        <div ref={gridRef} className="mt-12 mb-6 flex items-center gap-4 ornamental-divider" style={{ '--frame-color': theme.accent }}>
           <span className="animate-shimmer" style={{ color: theme.accent }}>◆</span>
         </div>
 
-        {/* Grid — starts at 1 column on the smallest phones */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
-          {filteredConferences.map((conf, i) => (
-            <Link key={conf.id} to={`/conference/${conf.id}`} onClick={() => onTrackDomainView(conf.domain)}>
-              <ConferenceCard
-                title={conf.title}
-                domain={conf.domain}
-                location={conf.location}
-                date={conf.date}
-                status={getConferenceStatus(conf.dateISO)}
-                image={conf.image}
-                delay={`${i * 80}ms`}
-                theme={theme}
-              />
-            </Link>
-          ))}
-        </div>
+        {/* Grid */}
+        {filteredConferences.length === 0 ? (
+          <p className="text-center font-['Montserrat'] py-10" style={{ color: theme.muted }}>
+            No conferences match your search. Try a different term or clear your filters.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
+            {filteredConferences.map((conf, i) => (
+              <Link key={conf.id} to={`/conference/${conf.id}`} onClick={() => onTrackDomainView(conf.domain)}>
+                <ConferenceCard
+                  title={conf.title}
+                  domain={conf.domain}
+                  location={conf.location}
+                  date={conf.date}
+                  status={getConferenceStatus(conf.dateISO)}
+                  image={conf.image}
+                  delay={`${i * 80}ms`}
+                  theme={theme}
+                  isRegistered={registeredIds.includes(conf.id)}
+                />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

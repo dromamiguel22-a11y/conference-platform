@@ -1,7 +1,67 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import conferences from '../conference.js';
 import { parseTimeToMinutes } from '../utils.js';
 import { getTheme, decoBgStyle, crimsonBright } from '../theme.js';
+
+function RegisteredCard({ conf, theme, onUnregister, delay }) {
+  const [confirming, setConfirming] = useState(false);
+
+  return (
+    <div
+      className="animate-fade-in-up ziggurat-frame transition-all duration-300 hover:scale-[1.03]"
+      style={{ animationDelay: delay, '--frame-color': theme.accent }}
+    >
+      <div className="ziggurat-inner p-5 flex flex-col gap-3 group h-full" style={{ backgroundColor: theme.panel }}>
+        <Link to={`/conference/${conf.id}`}>
+          {conf.image && (
+            <div className="h-32 w-full border overflow-hidden" style={{ borderColor: theme.border }}>
+              <img
+                src={conf.image}
+                alt={conf.title}
+                className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+              />
+            </div>
+          )}
+          <div className="mt-3">
+            <span className="text-xs font-['Montserrat'] tracking-widest uppercase" style={{ color: theme.accent }}>
+              {conf.date}
+            </span>
+            <h3 className="font-['Bodoni_Moda'] text-lg mt-1 transition-colors" style={{ color: theme.text }}>{conf.title}</h3>
+            <p className="text-sm font-['Montserrat'] mt-1" style={{ color: theme.muted }}>{conf.location}</p>
+          </div>
+        </Link>
+
+        {confirming ? (
+          <div className="flex items-center gap-3 mt-1">
+            <button
+              onClick={() => { onUnregister(conf.id); setConfirming(false); }}
+              className="text-xs font-['Montserrat'] uppercase tracking-widest font-bold hover:underline"
+              style={{ color: crimsonBright }}
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => setConfirming(false)}
+              className="text-xs font-['Montserrat'] uppercase tracking-widest font-bold hover:underline"
+              style={{ color: theme.muted }}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setConfirming(true)}
+            className="mt-2 text-xs font-['Montserrat'] uppercase tracking-widest font-bold self-start hover:underline transition-all"
+            style={{ color: crimsonBright }}
+          >
+            Unregister
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function Dashboard({ registeredIds, onUnregister, selectedSessions, isDarkMode }) {
   const theme = getTheme(isDarkMode);
@@ -43,39 +103,7 @@ function Dashboard({ registeredIds, onUnregister, selectedSessions, isDarkMode }
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {registeredConferences.map((conf, i) => (
-                <div
-                  key={conf.id}
-                  className="animate-fade-in-up ziggurat-frame transition-all duration-300 hover:scale-[1.03]"
-                  style={{ animationDelay: `${i * 90}ms`, '--frame-color': theme.accent }}
-                >
-                  <div className="ziggurat-inner p-5 flex flex-col gap-3 group h-full" style={{ backgroundColor: theme.panel }}>
-                    <Link to={`/conference/${conf.id}`}>
-                      {conf.image && (
-                        <div className="h-32 w-full border overflow-hidden" style={{ borderColor: theme.border }}>
-                          <img
-                            src={conf.image}
-                            alt={conf.title}
-                            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
-                          />
-                        </div>
-                      )}
-                      <div className="mt-3">
-                        <span className="text-xs font-['Montserrat'] tracking-widest uppercase" style={{ color: theme.accent }}>
-                          {conf.date}
-                        </span>
-                        <h3 className="font-['Bodoni_Moda'] text-lg mt-1 transition-colors" style={{ color: theme.text }}>{conf.title}</h3>
-                        <p className="text-sm font-['Montserrat'] mt-1" style={{ color: theme.muted }}>{conf.location}</p>
-                      </div>
-                    </Link>
-                    <button
-                      onClick={() => onUnregister(conf.id)}
-                      className="mt-2 text-xs font-['Montserrat'] uppercase tracking-widest font-bold self-start hover:underline transition-all"
-                      style={{ color: crimsonBright }}
-                    >
-                      Unregister
-                    </button>
-                  </div>
-                </div>
+                <RegisteredCard key={conf.id} conf={conf} theme={theme} onUnregister={onUnregister} delay={`${i * 90}ms`} />
               ))}
             </div>
           )}
@@ -105,7 +133,7 @@ function Dashboard({ registeredIds, onUnregister, selectedSessions, isDarkMode }
                 .sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time))
                 .map((session, index, sortedArray) => {
                   const hasConflict = sortedArray.some(
-                    (other) => other !== session && other.time === session.time
+                    (other) => other !== session && Math.abs(parseTimeToMinutes(other.time) - parseTimeToMinutes(session.time)) < 60
                   );
 
                   return (

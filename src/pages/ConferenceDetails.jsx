@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import conferences from '../conference.js';
 import getConferenceStatus from '../utils.js';
 import { getTheme, decoBgStyle, crimsonBright } from '../theme.js';
 
-function ConferenceDetails({ registeredIds, onRegister, onUnregister, selectedSessions, onAddSession, onRemoveSession, isDarkMode }) {
+function ConferenceDetails({ registeredIds, onRegister, onUnregister, selectedSessions, onAddSession, onRemoveSession, isDarkMode, currentUser }) {
   const theme = getTheme(isDarkMode);
   const { id } = useParams();
   const conference = conferences.find((conf) => conf.id === Number(id));
+  const [confirmingUnregister, setConfirmingUnregister] = useState(false);
 
   if (!conference) {
     return (
@@ -77,14 +79,46 @@ function ConferenceDetails({ registeredIds, onRegister, onUnregister, selectedSe
                     Event Has Ended
                   </button>
                 )
+              ) : !currentUser ? (
+                <div className="mt-4 flex flex-col items-center gap-2">
+                  <Link
+                    to="/login"
+                    className="px-10 py-4 font-['Montserrat'] text-xs uppercase tracking-widest font-bold border-2 rounded-sm transition-all duration-300 hover:scale-105"
+                    style={{ backgroundColor: crimsonBright, color: '#fff', borderColor: theme.accent }}
+                  >
+                    Log In to Register
+                  </Link>
+                  <p className="text-xs font-['Montserrat']" style={{ color: theme.muted }}>
+                    Don't have an account? <Link to="/register" className="underline" style={{ color: theme.accent }}>Register here</Link>
+                  </p>
+                </div>
               ) : isRegistered ? (
-                <button
-                  onClick={() => onUnregister(conference.id)}
-                  className="mt-4 px-10 py-4 font-['Montserrat'] text-xs uppercase tracking-widest font-bold border-2 rounded-sm transition-all duration-300 hover:scale-105"
-                  style={{ backgroundColor: 'transparent', color: crimsonBright, borderColor: crimsonBright }}
-                >
-                  ✓ Registered — Unregister
-                </button>
+                confirmingUnregister ? (
+                  <div className="mt-4 flex items-center gap-3">
+                    <button
+                      onClick={() => { onUnregister(conference.id); setConfirmingUnregister(false); }}
+                      className="px-6 py-3 font-['Montserrat'] text-xs uppercase tracking-widest font-bold rounded-sm text-white transition-all duration-300 hover:scale-105"
+                      style={{ backgroundColor: crimsonBright }}
+                    >
+                      Confirm Unregister
+                    </button>
+                    <button
+                      onClick={() => setConfirmingUnregister(false)}
+                      className="px-6 py-3 font-['Montserrat'] text-xs uppercase tracking-widest font-bold rounded-sm border-2 transition-all duration-300 hover:scale-105"
+                      style={{ borderColor: theme.border, color: theme.muted }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setConfirmingUnregister(true)}
+                    className="mt-4 px-10 py-4 font-['Montserrat'] text-xs uppercase tracking-widest font-bold border-2 rounded-sm transition-all duration-300 hover:scale-105"
+                    style={{ backgroundColor: 'transparent', color: crimsonBright, borderColor: crimsonBright }}
+                  >
+                    ✓ Registered — Unregister
+                  </button>
+                )
               ) : (
                 <button
                   onClick={() => onRegister(conference.id)}
@@ -174,13 +208,23 @@ function ConferenceDetails({ registeredIds, onRegister, onUnregister, selectedSe
                         {item.session}
                       </h4>
                       {!isCompleted && (
-                        <button
-                          onClick={() => (isAdded ? onRemoveSession(session) : onAddSession(session))}
-                          className="text-xs font-['Montserrat'] uppercase tracking-widest transition-all duration-300 hover:tracking-[0.2em]"
-                          style={{ color: isAdded ? theme.muted : theme.accent }}
-                        >
-                          {isAdded ? '✓ Added to Schedule' : '+ Add to Schedule'}
-                        </button>
+                        currentUser ? (
+                          <button
+                            onClick={() => (isAdded ? onRemoveSession(session) : onAddSession(session))}
+                            className="text-xs font-['Montserrat'] uppercase tracking-widest transition-all duration-300 hover:tracking-[0.2em]"
+                            style={{ color: isAdded ? theme.muted : theme.accent }}
+                          >
+                            {isAdded ? '✓ Added to Schedule' : '+ Add to Schedule'}
+                          </button>
+                        ) : (
+                          <Link
+                            to="/login"
+                            className="text-xs font-['Montserrat'] uppercase tracking-widest underline"
+                            style={{ color: theme.muted }}
+                          >
+                            Log in to add to schedule
+                          </Link>
+                        )
                       )}
                     </div>
                   </div>
