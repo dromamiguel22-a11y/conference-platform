@@ -134,7 +134,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
   return (
     <div className="min-h-screen pb-16" style={decoBgStyle(theme)}>
       {/* Hero */}
-      <div className="relative pt-6 sm:pt-8 pb-12 sm:pb-16 px-4 sm:px-6 flex flex-col items-center text-center overflow-hidden">
+      <div className="relative pt-2 sm:pt-3 pb-8 sm:pb-10 px-4 sm:px-6 flex flex-col items-center text-center overflow-hidden">
         <SideColumn side="left" theme={theme} />
         <SideColumn side="right" theme={theme} />
 
@@ -145,7 +145,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
           ></div>
         </div>
 
-        <div className="relative z-10 max-w-2xl animate-fade-in-up px-4 py-6 sm:px-8 sm:py-10 md:px-14 md:py-12">
+        <div className="relative z-10 max-w-2xl animate-fade-in-up px-4 py-2 sm:px-8 sm:py-4 md:px-14 md:py-6">
           <p className="text-2xl mb-2 animate-shimmer" style={{ color: theme.accent }}>❋</p>
           <p className="text-xs font-['Montserrat'] tracking-[0.3em] uppercase mb-4" style={{ color: theme.accent }}>
             ✦ Est. 2026 ✦
@@ -208,7 +208,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode }) {
 
       <div className="px-4 sm:px-6 max-w-6xl mx-auto">
         {/* Category pills */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-4">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-1">
           {categories.map((cat, i) => (
             <button
               key={cat.name}

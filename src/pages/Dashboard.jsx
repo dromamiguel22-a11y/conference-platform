@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import conferences from '../conference.js';
 import { parseTimeToMinutes } from '../utils.js';
-import { getTheme, decoBgStyle, crimson, crimsonBright } from '../theme.js';
+import { getTheme, decoBgStyle, crimsonBright } from '../theme.js';
 
-function Dashboard({ registeredIds, selectedSessions, isDarkMode }) {
+function Dashboard({ registeredIds, onUnregister, selectedSessions, isDarkMode }) {
   const theme = getTheme(isDarkMode);
   const registeredConferences = conferences.filter((conf) =>
     registeredIds.includes(conf.id)
@@ -15,7 +15,7 @@ function Dashboard({ registeredIds, selectedSessions, isDarkMode }) {
         <p className="text-xs font-['Montserrat'] tracking-[0.3em] uppercase mb-3 animate-shimmer" style={{ color: theme.muted }}>
           ✦ Your Pass ✦
         </p>
-        <h1 className="font-['Bodoni_Moda'] text-4xl" style={{ color: crimson }}>My Dashboard</h1>
+        <h1 className="font-['Bodoni_Moda'] text-4xl" style={{ color: theme.accent }}>My Dashboard</h1>
         <p className="font-['Montserrat'] text-sm mt-2" style={{ color: theme.muted }}>
           Registered conferences and personal schedule
         </p>
@@ -29,45 +29,53 @@ function Dashboard({ registeredIds, selectedSessions, isDarkMode }) {
             <span className="animate-shimmer" style={{ color: theme.accent }}>◆</span>
             <div className="h-px flex-grow" style={{ backgroundColor: theme.accent }}></div>
           </div>
-          <h2 className="font-['Bodoni_Moda'] text-xl text-center mb-8 uppercase tracking-widest" style={{ color: crimson }}>
+          <h2 className="font-['Bodoni_Moda'] text-xl text-center mb-8 uppercase tracking-widest" style={{ color: theme.accent }}>
             Registered Conferences
           </h2>
 
           {registeredConferences.length === 0 ? (
             <div className="border border-dashed flex flex-col items-center justify-center py-14 text-center transition-colors duration-300" style={{ borderColor: theme.border }}>
               <p className="font-['Montserrat']" style={{ color: theme.muted }}>You haven't registered for any conferences yet.</p>
-              <Link to="/" className="hover:underline text-sm mt-2 font-['Montserrat'] uppercase tracking-wide" style={{ color: crimson }}>
+              <Link to="/" className="hover:underline text-sm mt-2 font-['Montserrat'] uppercase tracking-wide" style={{ color: theme.accent }}>
                 Discover conferences →
               </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {registeredConferences.map((conf, i) => (
-                <Link
+                <div
                   key={conf.id}
-                  to={`/conference/${conf.id}`}
                   className="animate-fade-in-up ziggurat-frame transition-all duration-300 hover:scale-[1.03]"
                   style={{ animationDelay: `${i * 90}ms`, '--frame-color': theme.accent }}
                 >
-                <div className="ziggurat-inner p-5 flex flex-col gap-3 group h-full" style={{ backgroundColor: theme.panel }}>
-                  {conf.image && (
-                    <div className="h-32 w-full border overflow-hidden" style={{ borderColor: theme.border }}>
-                      <img
-                        src={conf.image}
-                        alt={conf.title}
-                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
-                      />
-                    </div>
-                  )}
-                  <div>
-                    <span className="text-xs font-['Montserrat'] tracking-widest uppercase" style={{ color: theme.accent }}>
-                      {conf.date}
-                    </span>
-                    <h3 className="font-['Bodoni_Moda'] text-lg mt-1 transition-colors" style={{ color: theme.text }}>{conf.title}</h3>
-                    <p className="text-sm font-['Montserrat'] mt-1" style={{ color: theme.muted }}>{conf.location}</p>
+                  <div className="ziggurat-inner p-5 flex flex-col gap-3 group h-full" style={{ backgroundColor: theme.panel }}>
+                    <Link to={`/conference/${conf.id}`}>
+                      {conf.image && (
+                        <div className="h-32 w-full border overflow-hidden" style={{ borderColor: theme.border }}>
+                          <img
+                            src={conf.image}
+                            alt={conf.title}
+                            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
+                          />
+                        </div>
+                      )}
+                      <div className="mt-3">
+                        <span className="text-xs font-['Montserrat'] tracking-widest uppercase" style={{ color: theme.accent }}>
+                          {conf.date}
+                        </span>
+                        <h3 className="font-['Bodoni_Moda'] text-lg mt-1 transition-colors" style={{ color: theme.text }}>{conf.title}</h3>
+                        <p className="text-sm font-['Montserrat'] mt-1" style={{ color: theme.muted }}>{conf.location}</p>
+                      </div>
+                    </Link>
+                    <button
+                      onClick={() => onUnregister(conf.id)}
+                      className="mt-2 text-xs font-['Montserrat'] uppercase tracking-widest font-bold self-start hover:underline transition-all"
+                      style={{ color: crimsonBright }}
+                    >
+                      Unregister
+                    </button>
                   </div>
                 </div>
-                </Link>
               ))}
             </div>
           )}
@@ -80,7 +88,7 @@ function Dashboard({ registeredIds, selectedSessions, isDarkMode }) {
             <span className="animate-shimmer" style={{ color: theme.accent }}>✦</span>
             <div className="h-px flex-grow" style={{ backgroundColor: theme.accent }}></div>
           </div>
-          <h2 className="font-['Bodoni_Moda'] text-xl text-center mb-8 uppercase tracking-widest" style={{ color: crimson }}>
+          <h2 className="font-['Bodoni_Moda'] text-xl text-center mb-8 uppercase tracking-widest" style={{ color: theme.accent }}>
             My Schedule
           </h2>
 

@@ -28,6 +28,9 @@ function App() {
   function registerConference(id) {
     setRegisteredIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
   }
+  function unregisterConference(id) {
+    setRegisteredIds((prev) => prev.filter((rid) => rid !== id));
+  }
 
   const [viewedDomains, setViewedDomains] = useState([]);
   function trackDomainView(domain) {
@@ -112,22 +115,22 @@ function App() {
         </span>
       </button>
 
-      <Link to="/" onClick={() => setIsMenuOpen(false)} className="uppercase hover:opacity-70 transition-opacity" style={navLinkStyle}>
+      <Link to="/" onClick={() => setIsMenuOpen(false)} className="uppercase font-bold hover:opacity-70 transition-opacity" style={navLinkStyle}>
         Discover
       </Link>
-      <Link to="/speakers" onClick={() => setIsMenuOpen(false)} className="uppercase hover:opacity-70 transition-opacity" style={navLinkStyle}>
+      <Link to="/speakers" onClick={() => setIsMenuOpen(false)} className="uppercase font-bold hover:opacity-70 transition-opacity" style={navLinkStyle}>
         Speakers
       </Link>
-      <Link to="/venues" onClick={() => setIsMenuOpen(false)} className="uppercase hover:opacity-70 transition-opacity" style={navLinkStyle}>
+      <Link to="/venues" onClick={() => setIsMenuOpen(false)} className="uppercase font-bold hover:opacity-70 transition-opacity" style={navLinkStyle}>
         Venues
       </Link>
-      <Link to="/dashboard" onClick={() => setIsMenuOpen(false)} className="uppercase hover:opacity-70 transition-opacity" style={navLinkStyle}>
+      <Link to="/dashboard" onClick={() => setIsMenuOpen(false)} className="uppercase font-bold hover:opacity-70 transition-opacity" style={navLinkStyle}>
         Schedule
       </Link>
 
       {currentUser ? (
         <>
-          <span className="uppercase" style={navLinkStyle}>
+          <span className="uppercase font-bold" style={navLinkStyle}>
             Welcome, {currentUser.name}
           </span>
           <button
@@ -140,7 +143,7 @@ function App() {
         </>
       ) : (
         <>
-          <Link to="/login" onClick={() => setIsMenuOpen(false)} className="uppercase hover:opacity-70 transition-opacity" style={navLinkStyle}>
+          <Link to="/login" onClick={() => setIsMenuOpen(false)} className="uppercase font-bold hover:opacity-70 transition-opacity" style={navLinkStyle}>
             Login
           </Link>
           <Link
@@ -168,14 +171,14 @@ function App() {
             <Link
               to="/"
               onClick={() => setIsMenuOpen(false)}
-              className="font-['Bodoni_Moda'] italic text-base sm:text-lg hover:opacity-80 transition-opacity"
+              className="font-['Bodoni_Moda'] text-base sm:text-lg hover:opacity-80 transition-opacity"
               style={{ color: '#FFF8EF' }}
             >
               LinConference Hub
             </Link>
 
             {/* Desktop nav — full row */}
-            <div className="hidden md:flex flex-wrap items-center gap-4 text-xs font-['Montserrat'] uppercase tracking-widest">
+            <div className="hidden md:flex flex-wrap items-center gap-4 text-sm font-['Montserrat'] uppercase tracking-widest">
               {navLinks}
             </div>
 
@@ -193,7 +196,7 @@ function App() {
 
           {/* Mobile dropdown panel */}
           {isMenuOpen && (
-            <div className="md:hidden flex flex-col items-start gap-4 mt-4 pb-2 text-xs font-['Montserrat'] uppercase tracking-widest animate-fade-in-up">
+            <div className="md:hidden flex flex-col items-start gap-4 mt-4 pb-2 text-sm font-['Montserrat'] uppercase tracking-widest animate-fade-in-up">
               {navLinks}
             </div>
           )}
@@ -211,6 +214,7 @@ function App() {
                 <ConferenceDetails
                   registeredIds={registeredIds}
                   onRegister={registerConference}
+                  onUnregister={unregisterConference}
                   selectedSessions={selectedSessions}
                   onAddSession={addToSchedule}
                   onRemoveSession={removeFromSchedule}
@@ -223,6 +227,7 @@ function App() {
               element={
                 <Dashboard
                   registeredIds={registeredIds}
+                  onUnregister={unregisterConference}
                   selectedSessions={selectedSessions}
                   isDarkMode={isDarkMode}
                 />
@@ -239,13 +244,13 @@ function App() {
         {/* Footer */}
         <footer className="border-t-2 mt-auto" style={{ backgroundColor: theme.panelAlt, borderColor: theme.accent }}>
           <div className="flex flex-col items-center gap-4 px-6 py-10 max-w-4xl mx-auto text-center">
-            <div className="font-['Bodoni_Moda'] italic text-2xl" style={{ color: theme.accent }}>
+            <div className="font-['Bodoni_Moda'] text-2xl" style={{ color: theme.accent }}>
               LinConference Hub
             </div>
-            <nav className="flex flex-wrap justify-center gap-6 text-sm font-['Montserrat'] uppercase tracking-widest">
-              <Link to="/contact" className="hover:underline transition-all" style={{ color: theme.muted }}>Contact</Link>
-              <button className="hover:underline transition-all" style={{ color: theme.muted }}>Privacy Policy</button>
-              <button className="hover:underline transition-all" style={{ color: theme.muted }}>Terms of Service</button>
+            <nav className="flex flex-wrap justify-center gap-6 text-base font-['Montserrat'] uppercase tracking-widest">
+              <Link to="/contact" className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Contact</Link>
+              <button className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Privacy Policy</button>
+              <button className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Terms of Service</button>
             </nav>
             <p className="text-xs font-['Montserrat'] uppercase tracking-widest opacity-70" style={{ color: theme.muted }}>
               © 2026 LinConference Hub — Lincoln University College Internship Project
