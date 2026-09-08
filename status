@@ -1,0 +1,90 @@
+[33mcommit 95befe7d4e825dcca6c62fd2112cc3ed99373ed0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Mon Sep 7 18:38:27 2026 +0800
+
+    Trigger Vercel deployment
+
+[33mcommit 76998fbd746b7cd35194bd21116eff25ad3d2d46[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Mon Sep 7 18:26:09 2026 +0800
+
+    Mistake
+
+[33mcommit 823f4d5c65aee99d594beac8e9e5546bc564d7fe[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Mon Sep 7 18:07:39 2026 +0800
+
+    Add real AI chatbot
+
+[33mcommit ad7cefb152ce979ee0188004d0939a5a31fc8ed3[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Fri Sep 4 11:01:15 2026 +0800
+
+    new
+
+[33mcommit 99a545a35db846dab852972c5911454d1d0a01ef[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Wed Aug 19 11:09:36 2026 +0800
+
+    Replace project with new version
+
+[33mcommit 0ac5d64d46586af33e1697b8fc65496b78ef04e7[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Wed Aug 19 09:00:43 2026 +0800
+
+    Restore Art-Deco visual elements (frames, card height, decorators) but keep background texture removed and nav buttons large
+    
+    Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+
+[33mcommit 400d944e35a1276e45afdddd006360bcc33bf20c[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Wed Aug 19 08:44:28 2026 +0800
+
+    Revert visual edits: restore original navbar and remove background texture
+    
+    Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+
+[33mcommit 8122bf0d5ab26872a8c025d87f8989ea416ac299[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Wed Aug 19 08:23:52 2026 +0800
+
+    Add Art Deco background texture and visual enhancements; improve nav and cards
+    
+    Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+
+[33mcommit 41650a0f378a42e7856dc6a2df23c0c33d575099[m[33m ([m[1;31morigin/agents/upload-local-project-to-github[m[33m, [m[1;32magents/upload-local-project-to-github[m[33m)[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Wed Aug 19 07:55:24 2026 +0800
+
+    modified:   src/App.jsx
+    modified:   src/components/Chatbot.jsx
+    modified:   src/conference.js
+    modified:   src/index.css
+    modified:   src/pages/ConferenceDetails.jsx
+    modified:   src/pages/Dashboard.jsx
+    modified:   src/pages/Home.jsx
+    new file:   src/theme.js
+
+[33mcommit 4f0a7461fb646150b377d8bfde9a3d1c824f86dc[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Thu Aug 6 15:09:26 2026 +0800
+
+    Add README
+
+[33mcommit a23cadae9fc7b1bf6738b5e9ba7dfb8cff432e69[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Thu Aug 6 14:55:15 2026 +0800
+
+    Add README
+
+[33mcommit 6fe4a16b2c80a00977eaaf300939fbbcd09d6fb4[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Thu Aug 6 14:50:24 2026 +0800
+
+    Fix routing on refresh for Vercel
+
+[33mcommit 103904628c2bd3f90bb6094b0914ba05b86c82c4[m
+Author: dromamiguel22-a11y <dromamiguel22@gmail.com>
+Date:   Thu Aug 6 14:07:31 2026 +0800
+
+    Initial commit

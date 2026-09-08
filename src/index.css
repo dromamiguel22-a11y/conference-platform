@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+/* Ziggurat-cut frame: gold/accent border that reliably follows the
+   clipped corners, used on conference cards and framed panels. */
+.ziggurat-frame {
+  background: var(--frame-color, #D4AF37);
+  padding: 2px;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+.ziggurat-inner {
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+/* Horizontal rule with a gap in the middle for a centered symbol,
+   used as a section divider throughout. */
+.ornamental-divider::before,
+.ornamental-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--frame-color, #D4AF37);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmerGold {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 6px var(--pulse-color, rgba(212,175,55,0.3)); }
+  50% { box-shadow: 0 0 18px var(--pulse-color, rgba(212,175,55,0.7)); }
+}
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+@keyframes glowBreathe {
+  0%, 100% { opacity: 0.10; }
+  50% { opacity: 0.22; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+.animate-shimmer {
+  animation: shimmerGold 2.2s ease-in-out infinite;
+}
+.animate-float {
+  animation: floatY 3s ease-in-out infinite;
+}
+.animate-glow-pulse {
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+.animate-icon-pulse {
+  animation: iconPulse 1.8s ease-in-out infinite;
+}
+.animate-glow-breathe {
+  animation: glowBreathe 4s ease-in-out infinite;
+}
