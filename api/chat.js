@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   // NOTE: Google renames/retires Gemini model IDs fairly often. If this
   // stops working again later, check aistudio.google.com or Gemini's
   // docs for the current free-tier model name and swap it in below.
-  const MODEL_NAME = 'gemini-2.5-flash';
+  const MODEL_NAME = 'gemini-3.6-flash';
 
   try {
     const response = await fetch(
