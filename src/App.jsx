@@ -9,6 +9,8 @@ import Register from "./pages/Register.jsx";
 import Speakers from "./pages/Speakers.jsx";
 import Venues from "./pages/Venues.jsx";
 import Contact from "./pages/Contact.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import TermsOfService from "./pages/TermsOfService.jsx";
 import Chatbot from "./components/Chatbot.jsx";
 import { getTheme, decoBgStyle, gold, crimsonBright } from "./theme.js";
 
@@ -238,6 +240,8 @@ function App() {
             <Route path="/speakers" element={<Speakers isDarkMode={isDarkMode} />} />
             <Route path="/venues" element={<Venues isDarkMode={isDarkMode} />} />
             <Route path="/contact" element={<Contact isDarkMode={isDarkMode} />} />
+            <Route path="/privacy" element={<PrivacyPolicy isDarkMode={isDarkMode} />} />
+            <Route path="/terms" element={<TermsOfService isDarkMode={isDarkMode} />} />
           </Routes>
         </div>
 
@@ -249,8 +253,8 @@ function App() {
             </div>
             <nav className="flex flex-wrap justify-center gap-6 text-base font-['Montserrat'] uppercase tracking-widest">
               <Link to="/contact" className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Contact</Link>
-              <button className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Privacy Policy</button>
-              <button className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Terms of Service</button>
+              <Link to="/privacy" className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Privacy Policy</Link>
+              <Link to="/terms" className="uppercase font-bold hover:underline transition-all" style={{ color: theme.muted }}>Terms of Service</Link>
             </nav>
             <p className="text-xs font-['Montserrat'] uppercase tracking-widest opacity-70" style={{ color: theme.muted }}>
               © 2026 LinConference Hub — Lincoln University College Internship Project
