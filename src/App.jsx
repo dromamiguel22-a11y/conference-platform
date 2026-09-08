@@ -10,7 +10,6 @@ import Speakers from "./pages/Speakers.jsx";
 import Venues from "./pages/Venues.jsx";
 import Contact from "./pages/Contact.jsx";
 import Chatbot from "./components/Chatbot.jsx";
-import Chat from "./components/Chat.jsx";
 import { getTheme, decoBgStyle, gold, crimsonBright } from "./theme.js";
 
 function App() {
