@@ -29,10 +29,9 @@ function Contact({ isDarkMode }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-16" style={decoBgStyle(theme)}>
-      <div className="ziggurat-frame w-full max-w-md animate-fade-in-up" style={{ '--frame-color': theme.accent }}>
-        <div className="ziggurat-inner px-8 py-10" style={{ backgroundColor: theme.panel }}>
-          <p className="text-xs font-['Montserrat'] tracking-[0.3em] uppercase text-center mb-2" style={{ color: theme.accent }}>
-            ✦ Reach the Assembly ✦
+      <div className="w-full max-w-md rounded-xl border p-8" style={{ backgroundColor: theme.panel, borderColor: theme.border }}>
+          <p className="text-xs font-['Montserrat'] tracking-[0.3em] uppercase text-center mb-2" style={{ color: theme.muted }}>
+            Reach the Assembly
           </p>
           <h1 className="font-['Bodoni_Moda'] text-3xl text-center mb-8" style={{ color: theme.accent }}>
             Contact Us
@@ -119,7 +118,6 @@ function Contact({ isDarkMode }) {
               </p>
             </>
           )}
-        </div>
       </div>
     </div>
   );

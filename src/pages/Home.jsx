@@ -33,54 +33,40 @@ function ConferenceCard(props) {
 
   return (
     <div
-      className="animate-fade-in-up ziggurat-frame w-full h-full shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
-      style={{ animationDelay: props.delay, '--frame-color': t.accent }}
+      className="animate-fade-in-up rounded-xl border overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+      style={{ animationDelay: props.delay, backgroundColor: t.panel, borderColor: t.border }}
     >
-      <div className="ziggurat-inner flex flex-col overflow-hidden group h-full" style={{ backgroundColor: t.panel }}>
-        <div className="relative h-32 sm:h-40 w-full border-b overflow-hidden shrink-0" style={{ borderColor: t.border }}>
-          <img
-            src={props.image}
-            alt={props.title}
-            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500"
-          />
-          {props.isRegistered && (
-            <div
-              className="absolute top-2 left-2 px-2 py-1 rounded-sm border flex items-center gap-1"
-              style={{ backgroundColor: t.panel, borderColor: t.accent }}
-            >
-              <span className="text-[10px] font-['Montserrat'] uppercase tracking-wider font-bold whitespace-nowrap" style={{ color: t.accent }}>
-                ✓ Registered
-              </span>
-            </div>
-          )}
-          <div
-            className={`absolute top-2 right-2 px-2 py-1 rounded-sm border flex items-center gap-1 ${tag.live ? 'animate-glow-pulse' : ''}`}
-            style={{ backgroundColor: tag.bg, borderColor: t.accent, '--pulse-color': t.pulseGlow }}
-          >
-            {tag.live && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>}
-            <span
-              className="text-[10px] font-['Montserrat'] uppercase tracking-wider font-bold whitespace-nowrap"
-              style={{ color: tag.text }}
-            >
-              {tag.label}
+      <div className="relative h-32 sm:h-40 w-full border-b overflow-hidden shrink-0" style={{ borderColor: t.border }}>
+        <img
+          src={props.image}
+          alt={props.title}
+          className="w-full h-full object-cover"
+        />
+        {props.isRegistered && (
+          <div className="absolute top-2 left-2 px-2 py-1 rounded-sm border" style={{ backgroundColor: t.panel, borderColor: t.accent }}>
+            <span className="text-[10px] font-['Montserrat'] uppercase tracking-wider font-bold whitespace-nowrap" style={{ color: t.accent }}>
+              ✓ Registered
             </span>
           </div>
-        </div>
-
-        <div className="p-3 sm:p-3.5 flex flex-col flex-grow">
-          <span className="text-[11px] font-['Montserrat'] font-bold uppercase tracking-widest mb-1" style={{ color: t.accent }}>
-            {props.domain}
+        )}
+        <div className="absolute top-2 right-2 px-2 py-1 rounded-sm border flex items-center gap-1" style={{ backgroundColor: tag.bg, borderColor: t.border }}>
+          {tag.live && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>}
+          <span className="text-[10px] font-['Montserrat'] uppercase tracking-wider font-bold whitespace-nowrap" style={{ color: tag.text }}>
+            {tag.label}
           </span>
-          <h3
-            className="font-['Bodoni_Moda'] text-sm sm:text-base mb-2 leading-snug line-clamp-2 min-h-[2.6rem] transition-colors duration-300"
-            style={{ color: t.text }}
-          >
-            {props.title}
-          </h3>
-          <div className="mt-auto pt-2 border-t space-y-1 text-xs font-['Montserrat']" style={{ borderColor: t.border, color: t.muted }}>
-            <p className="truncate">{props.location}</p>
-            <p className="uppercase tracking-wide opacity-70">{props.date}</p>
-          </div>
+        </div>
+      </div>
+
+      <div className="p-3 sm:p-3.5 flex flex-col flex-grow">
+        <span className="text-[11px] font-['Montserrat'] uppercase tracking-wide mb-1" style={{ color: t.accent }}>
+          {props.domain}
+        </span>
+        <h3 className="font-['Bodoni_Moda'] text-sm sm:text-base mb-2 leading-snug line-clamp-2 min-h-[2.6rem]" style={{ color: t.text }}>
+          {props.title}
+        </h3>
+        <div className="mt-auto pt-2 border-t space-y-1 text-xs font-['Montserrat']" style={{ borderColor: t.border, color: t.muted }}>
+          <p className="truncate">{props.location}</p>
+          <p>{props.date}</p>
         </div>
       </div>
     </div>
@@ -96,24 +82,10 @@ const categories = [
   { name: 'Sustainability', icon: '❖' },
 ];
 
-function SideColumn({ side, theme }) {
-  const positionClass = side === 'left' ? 'left-6 lg:left-10' : 'right-6 lg:right-10';
-  return (
-    <div className={`hidden md:flex flex-col items-center gap-6 absolute ${positionClass} top-1/2 -translate-y-1/2 opacity-35 pointer-events-none`}>
-      <span style={{ color: theme.accent }}>✦</span>
-      <div className="w-px h-20" style={{ background: `linear-gradient(to bottom, transparent, ${theme.accent}, transparent)` }}></div>
-      <span style={{ color: theme.accent }}>◆</span>
-      <div className="w-px h-20" style={{ background: `linear-gradient(to bottom, transparent, ${theme.accent}, transparent)` }}></div>
-      <span style={{ color: theme.accent }}>✦</span>
-    </div>
-  );
-}
-
 function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
   const theme = getTheme(isDarkMode);
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const gridRef = useRef(null);
 
   const searchLower = searchText.toLowerCase();
@@ -160,11 +132,8 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
 
   return (
     <div className="min-h-screen pb-16" style={decoBgStyle(theme)}>
-      {/* Hero */}
-      <div className="relative pt-2 sm:pt-3 pb-8 sm:pb-10 px-4 sm:px-6 flex flex-col items-center text-center overflow-hidden">
-        <SideColumn side="left" theme={theme} />
-        <SideColumn side="right" theme={theme} />
-
+      {/* Hero — one focal point (the glow), everything else static */}
+      <div className="relative pt-8 sm:pt-10 pb-8 sm:pb-10 px-4 sm:px-6 flex flex-col items-center text-center overflow-hidden">
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
           <div
             className="animate-glow-breathe w-72 h-72 sm:w-[420px] sm:h-[420px] md:w-[560px] md:h-[560px] rounded-full"
@@ -172,10 +141,9 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
           ></div>
         </div>
 
-        <div className="relative z-10 max-w-2xl animate-fade-in-up px-4 py-2 sm:px-8 sm:py-4 md:px-14 md:py-6">
-          <p className="text-2xl mb-2 animate-shimmer" style={{ color: theme.accent }}>❋</p>
-          <p className="text-xs font-['Montserrat'] tracking-[0.3em] uppercase mb-4" style={{ color: theme.accent }}>
-            ✦ Est. 2026 ✦
+        <div className="relative z-10 max-w-2xl px-4 py-2 sm:px-8 sm:py-4">
+          <p className="text-xs font-['Montserrat'] tracking-[0.3em] uppercase mb-4" style={{ color: theme.muted }}>
+            Est. 2026
           </p>
           <h1 className="font-['Bodoni_Moda'] text-3xl sm:text-4xl md:text-6xl leading-tight" style={{ color: theme.accent }}>
             The Grand Assembly<br />Awaits
@@ -185,23 +153,15 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
           </p>
 
           <div
-            className={`mt-6 sm:mt-8 border p-2 flex items-center max-w-lg mx-auto transition-all duration-300 rounded-lg ${isSearchFocused ? 'animate-glow-pulse' : ''}`}
-            style={{
-              backgroundColor: theme.panel,
-              borderColor: theme.accent,
-              '--pulse-color': theme.pulseGlow,
-            }}
+            className="mt-6 sm:mt-8 border p-2 flex items-center max-w-lg mx-auto rounded-lg"
+            style={{ backgroundColor: theme.panel, borderColor: theme.border }}
           >
-            <span className="text-lg px-2 animate-icon-pulse" style={{ color: theme.accent }}>
-              ◆
-            </span>
+            <span className="text-lg px-2" style={{ color: theme.accent }}>◆</span>
             <input
               type="text"
               placeholder="Search events, speakers, or dates..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
               onKeyDown={(e) => e.key === 'Enter' && scrollToResults()}
               className="bg-transparent border-none focus:ring-0 w-full min-w-0 px-2 py-2 outline-none font-['Montserrat'] text-sm sm:text-base"
               style={{ color: theme.text }}
@@ -221,12 +181,12 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
               <p className="font-['Bodoni_Moda'] text-xl sm:text-2xl" style={{ color: theme.accent }}>{conferenceCount}</p>
               <p className="text-[10px] font-['Montserrat'] uppercase tracking-widest" style={{ color: theme.muted }}>Conferences</p>
             </div>
-            <span className="animate-shimmer" style={{ color: theme.accent }}>◆</span>
+            <span style={{ color: theme.border }}>|</span>
             <div className="text-center">
               <p className="font-['Bodoni_Moda'] text-xl sm:text-2xl" style={{ color: theme.accent }}>{domainCount}</p>
               <p className="text-[10px] font-['Montserrat'] uppercase tracking-widest" style={{ color: theme.muted }}>Domains</p>
             </div>
-            <span className="animate-shimmer" style={{ color: theme.accent }}>◆</span>
+            <span style={{ color: theme.border }}>|</span>
             <div className="text-center">
               <p className="font-['Bodoni_Moda'] text-xl sm:text-2xl" style={{ color: theme.accent }}>{cityCount}</p>
               <p className="text-[10px] font-['Montserrat'] uppercase tracking-widest" style={{ color: theme.muted }}>Cities</p>
@@ -238,18 +198,16 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
       <div className="px-4 sm:px-6 max-w-6xl mx-auto">
         {/* Category pills */}
         <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mt-1">
-          {categories.map((cat, i) => (
+          {categories.map((cat) => (
             <button
               key={cat.name}
               onClick={() => setSelectedCategory(cat.name)}
-              className="animate-fade-in-up flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-['Montserrat'] uppercase tracking-widest transition-all duration-300 border hover:scale-105"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-['Montserrat'] uppercase tracking-wide transition-colors duration-200 border"
               style={{
-                animationDelay: `${i * 60}ms`,
                 backgroundColor: selectedCategory === cat.name ? crimsonBright : theme.panel,
                 color: selectedCategory === cat.name ? '#fff' : theme.muted,
                 borderColor: selectedCategory === cat.name ? crimsonBright : theme.border,
                 fontWeight: selectedCategory === cat.name ? 700 : 400,
-                transform: selectedCategory === cat.name ? 'scale(1.06)' : 'scale(1)',
               }}
             >
               <span>{cat.icon}</span> {cat.name}
@@ -258,7 +216,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="text-xs sm:text-sm font-['Montserrat'] uppercase tracking-widest font-bold hover:underline transition-all"
+              className="text-xs sm:text-sm font-['Montserrat'] uppercase tracking-wide font-bold hover:underline transition-all"
               style={{ color: theme.muted }}
             >
               ✕ Clear Filters
@@ -268,11 +226,8 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
 
         {/* Recommended */}
         {recommendedConferences.length > 0 && (
-          <div className="mt-10 animate-fade-in-up">
-            <div className="flex items-center gap-4 ornamental-divider mb-6" style={{ '--frame-color': theme.accent }}>
-              <span className="animate-shimmer" style={{ color: theme.accent }}>✦</span>
-            </div>
-            <p className="text-center text-[11px] font-['Montserrat'] tracking-widest uppercase mb-1" style={{ color: theme.accent }}>
+          <div className="mt-10">
+            <p className="text-center text-[11px] font-['Montserrat'] tracking-wide uppercase mb-1" style={{ color: theme.accent }}>
               Matched to your interests
             </p>
             <h2 className="text-center font-['Bodoni_Moda'] text-xl sm:text-2xl mb-6" style={{ color: theme.text }}>
@@ -288,20 +243,21 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
                     date={conf.date}
                     status={getConferenceStatus(conf.dateISO)}
                     image={conf.image}
-                    delay={`${i * 80}ms`}
+                    delay={`${i * 60}ms`}
                     theme={theme}
                     isRegistered={registeredIds.includes(conf.id)}
                   />
                 </Link>
               ))}
             </div>
+            <div className="mt-10 border-t" style={{ borderColor: theme.border }}></div>
           </div>
         )}
 
-        {/* Divider */}
-        <div ref={gridRef} className="mt-12 mb-6 flex items-center gap-4 ornamental-divider" style={{ '--frame-color': theme.accent }}>
-          <span className="animate-shimmer" style={{ color: theme.accent }}>◆</span>
-        </div>
+        {/* Results heading */}
+        <h2 ref={gridRef} className="pt-8 mb-5 text-center font-['Montserrat'] text-xs uppercase tracking-widest" style={{ color: theme.muted }}>
+          All Conferences
+        </h2>
 
         {/* Grid */}
         {filteredConferences.length === 0 ? (
@@ -319,7 +275,7 @@ function Home({ viewedDomains, onTrackDomainView, isDarkMode, registeredIds }) {
                   date={conf.date}
                   status={getConferenceStatus(conf.dateISO)}
                   image={conf.image}
-                  delay={`${i * 80}ms`}
+                  delay={`${i * 60}ms`}
                   theme={theme}
                   isRegistered={registeredIds.includes(conf.id)}
                 />
