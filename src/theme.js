@@ -70,6 +70,18 @@ function nightPatternSVG(color) {
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
 
+// Small tiled SVG: crisp zigzag/chevron lines — a classic, instantly
+// recognizable Art Deco motif, rendered as clean vector strokes rather
+// than a soft-edged CSS gradient.
+function dayPatternSVG(color) {
+  const svg = `
+    <svg xmlns='http://www.w3.org/2000/svg' width='40' height='24'>
+      <path d='M0 20 L10 4 L20 20 L30 4 L40 20' fill='none' stroke='${color}' stroke-width='1.6'/>
+    </svg>
+  `;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
 export function decoBgStyle(t) {
   if (t.isDark) {
     return {
@@ -80,11 +92,8 @@ export function decoBgStyle(t) {
   }
   return {
     backgroundColor: t.bg,
-    backgroundImage: `
-      repeating-linear-gradient(135deg, transparent 0 8px, ${t.texture} 8px 10px, transparent 10px 24px),
-      repeating-linear-gradient(45deg, transparent 0 8px, ${t.texture} 8px 10px, transparent 10px 24px)
-    `,
-    backgroundSize: '48px 48px',
+    backgroundImage: dayPatternSVG(t.texture),
+    backgroundSize: '40px 24px',
   };
 }
 

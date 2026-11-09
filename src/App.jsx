@@ -241,6 +241,7 @@ function App() {
                   onUnregister={unregisterConference}
                   selectedSessions={selectedSessions}
                   isDarkMode={isDarkMode}
+                  currentUser={currentUser}
                 />
               }
             />

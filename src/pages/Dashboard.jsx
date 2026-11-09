@@ -4,37 +4,17 @@ import conferences from '../conference.js';
 import { parseTimeToMinutes } from '../utils.js';
 import { getTheme, decoBgStyle, crimsonBright } from '../theme.js';
 
-function RegisteredCard({ conf, theme }) {
-  return (
-    <div
-      className="rounded-xl border overflow-hidden flex flex-col gap-3 shadow-sm hover:shadow-md transition-all duration-300"
-      style={{ backgroundColor: theme.panel, borderColor: theme.border }}
-    >
-      <Link to={`/conference/${conf.id}`} className="p-5 flex flex-col gap-3">
-        {conf.image && (
-          <div className="h-32 w-full border overflow-hidden" style={{ borderColor: theme.border }}>
-            <img src={conf.image} alt={conf.title} className="w-full h-full object-cover" />
-          </div>
-        )}
-        <div>
-          <span className="text-xs font-['Montserrat'] tracking-widest uppercase" style={{ color: theme.accent }}>
-            {conf.date}
-          </span>
-          <h3 className="font-['Bodoni_Moda'] text-lg mt-1" style={{ color: theme.text }}>{conf.title}</h3>
-          <p className="text-sm font-['Montserrat'] mt-1" style={{ color: theme.muted }}>{conf.location}</p>
-        </div>
-      </Link>
-    </div>
-  );
-}
-
 function RegisteredCardWithUnregister({ conf, theme, onUnregister }) {
   const [confirming, setConfirming] = useState(false);
 
   return (
     <div
-      className="rounded-xl border overflow-hidden flex flex-col gap-3 shadow-sm hover:shadow-md transition-all duration-300 p-5"
-      style={{ backgroundColor: theme.panel, borderColor: theme.border }}
+      className="ziggurat-frame shadow-sm hover:shadow-md transition-all duration-300"
+      style={{ '--frame-color': theme.accent }}
+    >
+    <div
+      className="ziggurat-inner flex flex-col gap-3 p-5"
+      style={{ backgroundColor: theme.panel }}
     >
       <Link to={`/conference/${conf.id}`}>
         {conf.image && (
@@ -78,14 +58,41 @@ function RegisteredCardWithUnregister({ conf, theme, onUnregister }) {
         </button>
       )}
     </div>
+    </div>
   );
 }
 
-function Dashboard({ registeredIds, onUnregister, selectedSessions, isDarkMode }) {
+function Dashboard({ registeredIds, onUnregister, selectedSessions, isDarkMode, currentUser }) {
   const theme = getTheme(isDarkMode);
   const registeredConferences = conferences.filter((conf) =>
     registeredIds.includes(conf.id)
   );
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6 py-16" style={decoBgStyle(theme)}>
+        <div className="w-full max-w-md rounded-xl border p-8 text-center" style={{ backgroundColor: theme.panel, borderColor: theme.border }}>
+          <p className="text-3xl mb-4" style={{ color: theme.accent }}>◆</p>
+          <h1 className="font-['Bodoni_Moda'] text-2xl mb-3" style={{ color: theme.accent }}>
+            Your Dashboard Awaits
+          </h1>
+          <p className="font-['Montserrat'] text-sm mb-8" style={{ color: theme.muted }}>
+            Log in to view your registered conferences and personal schedule.
+          </p>
+          <Link
+            to="/login"
+            className="inline-block px-8 py-3 rounded-lg font-['Montserrat'] uppercase tracking-widest font-bold text-white transition-transform hover:scale-105"
+            style={{ backgroundColor: crimsonBright }}
+          >
+            Log In
+          </Link>
+          <p className="text-sm font-['Montserrat'] mt-4" style={{ color: theme.muted }}>
+            No account? <Link to="/register" className="font-bold hover:underline" style={{ color: theme.accent }}>Register here</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pb-16" style={decoBgStyle(theme)}>

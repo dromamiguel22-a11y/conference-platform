@@ -33,9 +33,10 @@ function ConferenceCard(props) {
 
   return (
     <div
-      className="animate-fade-in-up rounded-xl border overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-      style={{ animationDelay: props.delay, backgroundColor: t.panel, borderColor: t.border }}
+      className="animate-fade-in-up ziggurat-frame h-full shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+      style={{ animationDelay: props.delay, '--frame-color': t.accent }}
     >
+      <div className="ziggurat-inner flex flex-col h-full" style={{ backgroundColor: t.panel }}>
       <div className="relative h-32 sm:h-40 w-full border-b overflow-hidden shrink-0" style={{ borderColor: t.border }}>
         <img
           src={props.image}
@@ -68,6 +69,7 @@ function ConferenceCard(props) {
           <p className="truncate">{props.location}</p>
           <p>{props.date}</p>
         </div>
+      </div>
       </div>
     </div>
   );
