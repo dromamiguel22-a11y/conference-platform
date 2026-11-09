@@ -11,8 +11,9 @@ function Register({ isDarkMode, onRegister }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
@@ -34,7 +35,10 @@ function Register({ isDarkMode, onRegister }) {
     }
 
     setError('');
-    const result = registerUser({ name, email, password });
+    setIsSubmitting(true);
+    const result = await registerUser({ name, email, password });
+    setIsSubmitting(false);
+
     if (!result.success) {
       setError(result.error);
       return;
@@ -118,10 +122,11 @@ function Register({ isDarkMode, onRegister }) {
 
           <button
             type="submit"
-            className="mt-2 py-3 rounded-lg font-['Montserrat'] uppercase tracking-widest font-bold text-white transition-transform hover:scale-105"
+            disabled={isSubmitting}
+            className="mt-2 py-3 rounded-lg font-['Montserrat'] uppercase tracking-widest font-bold text-white transition-transform hover:scale-105 disabled:opacity-60"
             style={{ backgroundColor: crimsonBright }}
           >
-            Create Account
+            {isSubmitting ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 

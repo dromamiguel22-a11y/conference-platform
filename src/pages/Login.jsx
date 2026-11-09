@@ -9,8 +9,9 @@ function Login({ isDarkMode, onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!email.trim() || !password.trim()) {
@@ -24,7 +25,10 @@ function Login({ isDarkMode, onLogin }) {
     }
 
     setError('');
-    const result = loginUser({ email, password });
+    setIsSubmitting(true);
+    const result = await loginUser({ email, password });
+    setIsSubmitting(false);
+
     if (!result.success) {
       setError(result.error);
       return;
@@ -80,10 +84,11 @@ function Login({ isDarkMode, onLogin }) {
 
           <button
             type="submit"
-            className="mt-2 py-3 rounded-lg font-['Montserrat'] uppercase tracking-widest font-bold text-white transition-transform hover:scale-105"
+            disabled={isSubmitting}
+            className="mt-2 py-3 rounded-lg font-['Montserrat'] uppercase tracking-widest font-bold text-white transition-transform hover:scale-105 disabled:opacity-60"
             style={{ backgroundColor: crimsonBright }}
           >
-            Sign In
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
 
