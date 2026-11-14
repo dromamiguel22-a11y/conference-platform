@@ -1,9 +1,9 @@
 // Vercel serverless function — runs on the server, never in the
 // browser, so the API key stays hidden from anyone inspecting the site.
 //
-// Uses Groq's free tier (no credit card required, ~1,000 requests/day
-// as of testing) instead of Gemini, since Gemini's free-tier request
-// limit turned out to be too strict for regular use.
+// Uses Groq's API. Groq's model lineup changes often, so the model name
+// can be overridden with a GROQ_MODEL environment variable in Vercel
+// without touching this code.
 import conferences from '../src/conference.js';
 
 export default async function handler(req, res) {
@@ -24,10 +24,9 @@ export default async function handler(req, res) {
 
   const systemPrompt = `You are the LinConference Hub Assistant, a warm, slightly formal 1920s-style concierge for a conference discovery website called LinConference Hub. Here are the current conferences available: ${conferenceSummary}. Help visitors find conferences that match their interests, answer questions about dates/locations/domains, and explain that they can register on a conference's details page ("Register Now" button) and view their saved conferences and schedule via "Schedule" in the navigation. Keep replies concise (2-4 sentences). If asked something unrelated to conferences, politely redirect back to how you can help with the event listings.`;
 
-  // NOTE: Groq's free-tier model lineup shifts fairly often. If this
-  // model name stops working, check console.groq.com for the current
-  // free-tier model list and swap it in below.
-  const MODEL_NAME = 'llama-3.3-70b-versatile';
+  // Default is a production model with public rate limits. Override by
+  // setting GROQ_MODEL in Vercel if this name is ever retired.
+  const MODEL_NAME = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -47,8 +46,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // If Groq returned an error (bad model name, quota, etc.), surface
-    // it directly in the chat instead of a generic unhelpful fallback.
     if (data.error) {
       console.error('Groq API error:', data.error);
       return res.status(200).json({
